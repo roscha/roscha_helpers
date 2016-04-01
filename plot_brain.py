@@ -57,7 +57,7 @@ def plotZslices_alloption(niftipath,ortho='z',cut_coords='',Nraw=1,smoothing=0,L
     #adjust threshold by normalizing image in the default version and taking 0.5
     if thresholdpos=='def':
         data=nibabel.nifti1.Nifti1Image(data.get_data()/np.float(np.max(data.get_data())),data.get_affine())
-        thresholdpos=0.5
+        thresholdpos=[0.5]
     #organize thresholds, more than 1 threshold to make a layer effect,
     #positive and negative values display are treated independantly:
     if type(thresholdpos)!=np.bool: thresholdpos=[i for i in np.sort(thresholdpos)]
