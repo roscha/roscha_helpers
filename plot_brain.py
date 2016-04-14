@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 def plotZslices_alloption(niftipath,mnipath='',ortho='z',cut_coords='',Nraw=1,smoothing=0,LR=False,outdir='',colorpos='r',colorneg='b',Zannotate=False,thresholdpos='def',Zannotates='def',thresholdneg=False,alphamap=1,alphabrain=1):
     "niftipath: path to the nifti file, can be a 3D - if activation map, specify thresholds,"
-    "mnipath : path to the 
+    "mnipath : path to the mni T1 brain
     "cut_coords can be a int as the number of zslices to display of a list of slices number (in MNI) (even list of one to get one specific slice)"
     "Nraw: the number of raw"
     "smoothing: number of voxel to smooth; LR:annotate left and right"
