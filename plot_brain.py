@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
-def plotZslices_alloption(niftipath,ortho='z',cut_coords='',Nraw=1,smoothing=0,LR=False,outdir='',colorpos='r',colorneg='b',Zannotate=False,thresholdpos='def',Zannotates='def',thresholdneg=False,alphamap=1,alphabrain=1):
+def plotZslices_alloption(niftipath,mnipath='',ortho='z',cut_coords='',Nraw=1,smoothing=0,LR=False,outdir='',colorpos='r',colorneg='b',Zannotate=False,thresholdpos='def',Zannotates='def',thresholdneg=False,alphamap=1,alphabrain=1):
     "niftipath: path to the nifti file, can be a 3D - if activation map, specify thresholds,"
+    "mnipath : path to the 
     "cut_coords can be a int as the number of zslices to display of a list of slices number (in MNI) (even list of one to get one specific slice)"
     "Nraw: the number of raw"
     "smoothing: number of voxel to smooth; LR:annotate left and right"
@@ -22,6 +23,8 @@ def plotZslices_alloption(niftipath,ortho='z',cut_coords='',Nraw=1,smoothing=0,L
     data=nibabel.load(niftipath)
     datasize=data.get_shape()
     lineW=1./(Nraw+int((Zannotate=='Brain' or Zannotate=='Both')))
+    if mnipath=='':
+        mnipath='/home/mrstats/maamen/Software/fsl/data/standard/MNI152_T1_1mm_brain.nii.gz' ##this only works for the donders institute (Nijmegen, The Neterlands)
     if type(cut_coords)==int or cut_coords=='':
         if cut_coords=='':
             cut_coords=6
@@ -104,9 +107,9 @@ def plotZslices_alloption(niftipath,ortho='z',cut_coords='',Nraw=1,smoothing=0,L
             j+=1
         ##plot the brain contour for Z brain slices
         #externe
-        brain.add_contours(nilearn.image.smooth_img('/home/mrstats/maamen/Software/fsl/data/standard/MNI152_T1_1mm_brain.nii.gz',5),alpha=1*alphabrain, levels=[95],linewidths=lineW, cmap=sns.dark_palette('w', as_cmap=True),)       
+        brain.add_contours(nilearn.image.smooth_img(mnipath,5),alpha=1*alphabrain, levels=[95],linewidths=lineW, cmap=sns.dark_palette('w', as_cmap=True),)       
         #interne (a little transparent)
-        brain.add_contours(nilearn.image.smooth_img('/home/mrstats/maamen/Software/fsl/data/standard/MNI152_T1_1mm_brain.nii.gz',0.5),alpha=0.8*alphabrain, levels=[5000],linewidths=lineW)
+        brain.add_contours(nilearn.image.smooth_img(mnipath,0.5),alpha=0.8*alphabrain, levels=[5000],linewidths=lineW)
         #add annotation if reauested
         if Zannotate=='Both' or Zannotate=='Number' :
             brain.annotate(left_right=LR,size=int(12*lineW))
@@ -149,8 +152,8 @@ def plotZslices_alloption(niftipath,ortho='z',cut_coords='',Nraw=1,smoothing=0,L
                     brain.add_contours(img2,filled=True,levels=[k],cmap=None,colors=[[colorprovneg[kn][0],colorprovneg[kn][1],colorprovneg[kn][2]]],linewidths=lineW,alpha=k/np.max(thresholdpos))#alphamap)                    
                 
             j+=1
-        brain.add_contours(nilearn.image.smooth_img('/home/mrstats/maamen/Software/fsl/data/standard/MNI152_T1_1mm_brain.nii.gz',5),alpha=1*alphabrain, levels=[95],linewidths=lineW, cmap=sns.dark_palette('w', as_cmap=True),)       
-        brain.add_contours(nilearn.image.smooth_img('/home/mrstats/maamen/Software/fsl/data/standard/MNI152_T1_1mm_brain.nii.gz',0.5),alpha=0.8*alphabrain, levels=[5000],linewidths=lineW)
+        brain.add_contours(nilearn.image.smooth_img(mnipath,5),alpha=1*alphabrain, levels=[95],linewidths=lineW, cmap=sns.dark_palette('w', as_cmap=True),)       
+        brain.add_contours(nilearn.image.smooth_img(mnipath,0.5),alpha=0.8*alphabrain, levels=[5000],linewidths=lineW)
         ##plot the line indicating the cut
         for i in cc:
             ax.plot([-100, 100], [i, i], 'k-',lw=lineW)#/(85.+73.)
